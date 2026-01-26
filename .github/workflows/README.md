@@ -11,8 +11,11 @@ This directory contains CI/CD workflows for the template project.
 **Jobs:**
 - Formatting check (rustfmt)
 - Linting (clippy)
-- Tests (unit, integration, doc tests)
+- Tests (unit + integration)
 - Multiple platform builds (Linux, macOS, Windows)
+- Documentation build (`cargo doc`)
+- Security audit (`cargo audit`)
+- MSRV check (`cargo check`)
 
 **Usage:** Automatically runs on every push and PR
 
@@ -22,34 +25,12 @@ This directory contains CI/CD workflows for the template project.
 **Triggers:**
 - Schedule (Weekly on Monday 00:00 UTC)
 - Manual trigger (workflow_dispatch)
-- Release tags (`v*`)
 
-**Purpose:** Run benchmarks and publish results
+**Purpose:** Run `cargo bench` and upload the output as an artifact
 
-**Jobs:**
-1. **Build** - Compile benchmark binaries in release mode
-2. **Run** - Execute full benchmark suite (`cargo bench --bench runner`)
-3. **Generate Docs** - Create Markdown tables and interactive charts
-4. **Commit** - Push results to `docs/benchmarks/latest/`
-5. **Deploy** - Triggered by Jekyll workflow
+**Output:** an artifact named `bench-output-<sha>` containing `bench-output.txt`.
 
-**Output:**
-```
-docs/benchmarks/latest/
-├── index.md        # Markdown tables
-├── charts.html     # Interactive visualizations
-└── results.json    # Raw data
-```
-
-**Manual Trigger:**
-```bash
-gh workflow run benchmarks.yml
-```
-
-**Create Version Snapshot:**
-```bash
-gh workflow run benchmarks.yml -f create_snapshot=v0.2.0
-```
+**Manual Trigger:** `gh workflow run benchmarks.yml`
 
 ---
 
@@ -74,7 +55,7 @@ gh workflow run benchmarks.yml -f create_snapshot=v0.2.0
 ### 🚀 Release (`release.yml`)
 **Triggers:** Push to release tags
 **Purpose:** Create GitHub releases
-**Status:** Check file for current configuration
+**Status:** Intended as a starting point; adjust to your release process.
 
 ---
 
